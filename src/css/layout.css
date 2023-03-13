@@ -1,0 +1,31 @@
+.custom-bg-gray {
+    background-color: gray
+}
+
+.custom-header-bg {
+    background-color: #20232a;
+}
+
+.custom-footer-bg {
+    background-color: #e2e2e2;
+}
+
+
+.content-padding-top {
+    padding-block-start: 56px;
+}
+
+
+@media screen and (min-width: 576px) {
+    .sidebar-fixed-width {
+        width: 200px;
+    }
+}
+
+/* On screens that are 600px or less, set the background color to olive */
+@media screen and (max-width: 576px) {
+
+    .sidebar-fixed-width {
+        width: auto;
+    }
+}

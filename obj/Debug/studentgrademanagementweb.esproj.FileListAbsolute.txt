@@ -1,0 +1,4 @@
+D:\workspace\Visual Studio Projects\repos\StudentGradeManagementWeb\StudentGradeManagementWeb\obj\Debug\studentgrademanagementweb.esproj.SuggestedBindingRedirects.cache
+D:\workspace\Visual Studio Projects\repos\StudentGradeManagementWeb\StudentGradeManagementWeb\obj\Debug\studentgrademanagementweb.esproj.CoreCompileInputs.cache
+C:\Users\sunte\source\repos\StudentGradeManagementWeb\StudentGradeManagementWeb\obj\Debug\studentgrademanagementweb.esproj.SuggestedBindingRedirects.cache
+C:\Users\sunte\source\repos\StudentGradeManagementWeb\StudentGradeManagementWeb\obj\Debug\studentgrademanagementweb.esproj.CoreCompileInputs.cache
