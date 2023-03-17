@@ -1,21 +1,16 @@
 import "bootstrap/dist/css/bootstrap.css";
 import "../css/site.css"
 import "../css/layout.css"
-import { useState } from 'react';
 import {
-    useNavigate,
     Form,
-    useLoaderData
 } from "react-router-dom";
-import { IsAuthenticated } from "../common/users"
-import { RoutingType } from '../common/data';
 
 export default function Public() {
     return (
         <div className="container-fluid px-0">
             <div className="d-flex flex-column vh-100">
                 <div className="d-flex justify-content-between fixed-top py-1 custom-header-bg">
-                    <Form action="/public">
+                    <Form action="/">
                         <button type="submit" className="btn btn-link p-2">Home</button>
                     </Form>
                     <ul className="nav">

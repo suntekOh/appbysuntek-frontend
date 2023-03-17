@@ -40,11 +40,11 @@ export async function getUser(userDto: UserDto): Promise<UserDto | undefined> {
 //    return user;
 //}
 
-export async function IsAuthenticated() {
-    await fakeNetwork();
-    let authenticatedUser = await localforage.getItem("authenticated-user");
-    return authenticatedUser != null;
-}
+//export async function IsAuthenticated() {
+//    await fakeNetwork();
+//    let authenticatedUser = await localforage.getItem("authenticated-user");
+//    return authenticatedUser != null;
+//}
 
 
 //export async function getUser(id) {

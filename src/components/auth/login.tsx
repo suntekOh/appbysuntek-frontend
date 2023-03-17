@@ -50,7 +50,7 @@ export default function Login({ }) {
         };
 
         let user = await getUser(userDto);
-        let from = location.state?.from?.pathname || "/";
+        let from = location.state?.from?.pathname || "/root";
 
         auth.signin(user, () => {
             // Send them back to the page they tried to visit when they were

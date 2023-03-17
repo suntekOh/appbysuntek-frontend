@@ -7,8 +7,8 @@ import {
     Form,
     useLoaderData
 } from "react-router-dom";
-import { IsAuthenticated } from "../common/users"
 import { RoutingType } from '../common/data';
+import { isLoggedIn, loggedInUser } from './auth/authProvider';
 
 
 export async function action() {
@@ -17,8 +17,9 @@ export async function action() {
     //return redirect(`/contacts/${contact.id}/edit`);
 }
 
-export async function loader(props: { request: any }) {
-    return await IsAuthenticated();
+export function loader(props: { request: any }) {
+    return null;
+
     //const url = new URL(request.url);
     //const q = url.searchParams.get("q");
 /*    const contacts = await getContacts(q);*/
@@ -33,9 +34,11 @@ export default function Root() {
     const [routingType, setRoutingType] = useState(RoutingType.AnonymousMain);
     const [user, setUser] = useState(null);
 
-    const isAuthenticated = useLoaderData() as boolean;
-    if (isAuthenticated) {
-        alert('signed in')
+    const loggedIn = isLoggedIn();
+    const authenticatedUser = loggedInUser();
+
+    if (loggedIn === false || authenticatedUser === null) {
+        throw new Error("wrong approach");
     }
 
     //const navigate = useNavigate();
@@ -52,28 +55,18 @@ export default function Root() {
 
     const content = <div>welcome to protected page</div>;
 
-    const isShowSideMenu = false//routingType === RoutingType.UserMain;
 
     return (
         <div className="container-fluid px-0">
             <div className="d-flex flex-column vh-100">
                 <div className="d-flex justify-content-between fixed-top py-1 custom-header-bg">
-                    <button onClick={() => setRoutingType(RoutingType.AnonymousMain)} className="btn btn-link p-2">Home</button>
-                    {user != null && <div className="d-flex flex-nowrap text-nowrap text-white p-2">Welcome test</div>}
-                    {user == null &&
-                        <ul className="nav">
-                            <li className="nav-item">
-                                <Form action="/auth/login">
-                                    <button type="submit" className="btn btn-link">Already a user?</button>
-                                </Form>
-                            </li>
-                        </ul>
-                    }
+                    <Form action="/root">
+                        <button type="submit" className="btn btn-link p-2">Home</button>
+                    </Form>
+                    <div className="d-flex flex-nowrap text-nowrap text-white p-2">Welcome {authenticatedUser}!</div>
                 </div>
 
                 <div className="flex-grow-1 d-flex flex-wrap content-padding-top">
-                    {
-                        isShowSideMenu &&
                         <ul className="nav flex-column">
                             <li className="nav-item">
                                 <button className="btn btn-link">Link</button>
@@ -88,7 +81,6 @@ export default function Root() {
                                 <button className="btn btn-link">Link</button>
                             </li>
                         </ul>
-                    }
                     <div className="px-2 flex-grow-1 overflow-auto vh-100">
                         {content}
                     </div>
