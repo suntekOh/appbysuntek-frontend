@@ -1,6 +1,6 @@
 import { matchSorter } from "match-sorter";
 import localforage from "localforage";
-import { UserDto } from "../model/userDto";
+import { UserDto } from "../models/user-models";
 
 
 

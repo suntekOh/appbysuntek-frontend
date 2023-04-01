@@ -6,12 +6,12 @@ import {
     Navigate,
     Outlet,
 } from "react-router-dom";
-import { UserDto } from '../../model/userDto';
+import { SignedInUser } from '../../models/user-models';
 import { flushSync } from 'react-dom';
 
 interface AuthContextType {
-    user: any;
-    signin: (user: UserDto | undefined, callback: VoidFunction) => void;
+    user: SignedInUser;
+    signin: (user: SignedInUser | undefined, callback: VoidFunction) => void;
     signout: (callback: VoidFunction) => void;
 }
 
@@ -20,11 +20,14 @@ let AuthContext = React.createContext<AuthContextType>(null!);
 export function AuthProvider(): JSX.Element {
     let [user, setUser] = React.useState<any>(null);
 
-    let signin = (userDto: UserDto | undefined, callback: VoidFunction) => {
-        if (userDto) {
+    let signin = (signedInUser: SignedInUser | undefined, callback: VoidFunction) => {
+        if (signedInUser) {
             return fakeAuthProvider.signin(() => {
                 flushSync(() => {
-                    setUser(userDto.userId);
+                    setUser({
+                        userId: signedInUser.userId,
+                        authToken: signedInUser.authToken
+                    });
                 });
                 callback();
             });
@@ -76,7 +79,7 @@ export function isLoggedIn(): boolean {
 
 export function loggedInUser(): string {
     let auth = useAuth();
-    return auth?.user;
+    return auth?.user?.userId ?? "";
 }
 
 
@@ -90,7 +93,7 @@ function AuthStatus() {
 
     return (
         <p>
-            Welcome {auth.user}!{" "}
+            Welcome {auth.user.userId}!{" "}
             <button
                 onClick={() => {
                     auth.signout(() => navigate("/"));

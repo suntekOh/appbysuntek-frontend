@@ -5,7 +5,7 @@ import {
 } from "react-router-dom";
 
 import { createUser } from "../../common/users";
-import { UserDto } from '../../model/userDto';
+import { UserDto } from '../../models/user-models';
 
 export async function action(props: { request: any }) {
     const formData = await props.request.formData();

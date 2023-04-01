@@ -1,5 +1,5 @@
 import "../../css/login.css"
-import { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import {
     Form,
     redirect,
@@ -8,8 +8,11 @@ import {
 } from "react-router-dom";
 
 import { getUser } from "../../common/users";
-import { UserDto } from "../../model/userDto";
+import { SignedInUser, UserDto } from "../../models/user-models";
 import { useAuth } from "./authProvider";
+import { createHttpClient } from "../../services/http-client/http-client-service";
+import { AxiosResponse } from "axios";
+import { useErrorBoundary } from "react-error-boundary";
 
 export async function action(props: { request: any }) {
     return null;
@@ -20,6 +23,8 @@ export default function Login({ }) {
         userId: '',
         password: ''
     });
+
+    const { showBoundary } = useErrorBoundary();
 
     let auth = useAuth();
     let location = useLocation();
@@ -41,27 +46,52 @@ export default function Login({ }) {
     }
 
     async function handleLogin(event: React.FormEvent<HTMLFormElement>) {
-        event.preventDefault();
-        let formData = new FormData(event.currentTarget);
-        const userDto: UserDto = {
-            userId: formData.get("userId") as string,
-            password: formData.get("password") as string,
-            email: ""
-        };
+        try {
+            event.preventDefault();
+            let formData = new FormData(event.currentTarget);
+            const userDto: UserDto = {
+                userId: formData.get("userId") as string,
+                password: formData.get("password") as string,
+                email: ""
+            };
+            let response = await verifyLogin(userDto);
+            if (response.status === 200 && response.headers['auth-token']) {
+                let from = location.state?.from?.pathname || "/root";
+                let user: SignedInUser = {
+                    userId: userDto.userId,
+                    authToken: response.headers['auth-token']
+                }
 
-        let user = await getUser(userDto);
-        let from = location.state?.from?.pathname || "/root";
+                auth.signin(user, () => {
+                    // Send them back to the page they tried to visit when they were
+                    // redirected to the login page. Use { replace: true } so we don't create
+                    // another entry in the history stack for the login page.  This means that
+                    // when they get to the protected page and click the back button, they
+                    // won't end up back on the login page, which is also really nice for the
+                    // user experience.
+                    navigate(from, { replace: true });
+                });
+            } else {
+                throw new Error();
+            } 
+        } catch (error: any) {
+            if (error?.response?.status) {
+                alert(error.response.data?.message);
+                return;
+            }
+            showBoundary({ message: "Error Occurred during user verificaiton." });
+            return;
+        }
 
-        auth.signin(user, () => {
-            // Send them back to the page they tried to visit when they were
-            // redirected to the login page. Use { replace: true } so we don't create
-            // another entry in the history stack for the login page.  This means that
-            // when they get to the protected page and click the back button, they
-            // won't end up back on the login page, which is also really nice for the
-            // user experience.
-            navigate(from, { replace: true });
-        });
+        //let user = await getUser(userDto);
+
     }
+
+    async function verifyLogin(user: UserDto): Promise<AxiosResponse<any>> {
+        const httpClient = createHttpClient();
+        return await httpClient.get(`/users/verifyLogin?user_name=${user.userId}&password=${user.password}`);
+    }
+
 
     return (
         <div className="d-flex min-vh-100 justify-content-center align-items-center">

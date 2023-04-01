@@ -1,5 +1,3 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
 import {
     createBrowserRouter,
     RouterProvider,
@@ -11,9 +9,10 @@ import AuthRoot from "./components/auth/auth-root";
 import Login from "./components/auth/login";
 import ForgotPassword from './components/auth/forgot-password';
 import SignUp, { action as signUpAction } from './components/auth/signup';
-import ErrorPage from "./components/error-page";
+import RouteErrorPage from "./components/route-error-page";
 import { AuthProvider, RequireAuth } from './components/auth/authProvider';
 import Public from './components/public';
+import { ErrorBoundary } from "react-error-boundary";
 
 function App() {
 
@@ -21,7 +20,7 @@ function App() {
         createRoutesFromElements(
             <Route
                 element={<AuthProvider />}
-                errorElement={<ErrorPage />}
+                errorElement={<RouteErrorPage />}
             >
                 <Route
                     element={
@@ -64,7 +63,9 @@ function App() {
     );
 
     return (
-        <RouterProvider router={router} />
+        <ErrorBoundary fallback={<div>Something went wrong</div>}>
+            <RouterProvider router={router} />
+        </ErrorBoundary>
     );
 }
 
