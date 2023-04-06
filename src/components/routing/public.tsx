@@ -1,6 +1,6 @@
 import "bootstrap/dist/css/bootstrap.css";
-import "../css/site.css"
-import "../css/layout.css"
+import "../../css/site.css"
+import "../../css/layout.css"
 import {
     Form,
 } from "react-router-dom";

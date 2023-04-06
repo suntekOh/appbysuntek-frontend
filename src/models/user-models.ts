@@ -1,10 +1,9 @@
 export interface UserDto {
-    userId: string
+    userName: string
     password: string
     email: string,
 }
 
 export interface SignedInUser {
-    userId: string,
-    authToken: string
+    userName: string,
 }

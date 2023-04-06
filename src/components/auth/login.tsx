@@ -7,10 +7,9 @@ import {
     useLocation
 } from "react-router-dom";
 
-import { getUser } from "../../common/users";
 import { SignedInUser, UserDto } from "../../models/user-models";
 import { useAuth } from "./authProvider";
-import { createHttpClient } from "../../services/http-client/http-client-service";
+import { createHttpClient } from "../../services/http-client-service";
 import { AxiosResponse } from "axios";
 import { useErrorBoundary } from "react-error-boundary";
 
@@ -20,7 +19,7 @@ export async function action(props: { request: any }) {
 
 export default function Login({ }) {
     const [credentials, setCredentials] = useState({
-        userId: '',
+        userName: '',
         password: ''
     });
 
@@ -34,7 +33,7 @@ export default function Login({ }) {
     function handleIdChange(e: any) {
         setCredentials({
             ...credentials,
-            userId: e.target.value
+            userName: e.target.value
         })
     }
 
@@ -50,17 +49,17 @@ export default function Login({ }) {
             event.preventDefault();
             let formData = new FormData(event.currentTarget);
             const userDto: UserDto = {
-                userId: formData.get("userId") as string,
+                userName: formData.get("userName") as string,
                 password: formData.get("password") as string,
                 email: ""
             };
             let response = await verifyLogin(userDto);
-            if (response.status === 200 && response.headers['auth-token']) {
+            if (response.status === 200) {
                 let from = location.state?.from?.pathname || "/root";
                 let user: SignedInUser = {
-                    userId: userDto.userId,
-                    authToken: response.headers['auth-token']
+                    userName: userDto.userName,
                 }
+
 
                 auth.signin(user, () => {
                     // Send them back to the page they tried to visit when they were
@@ -71,6 +70,7 @@ export default function Login({ }) {
                     // user experience.
                     navigate(from, { replace: true });
                 });
+
             } else {
                 throw new Error();
             } 
@@ -89,7 +89,7 @@ export default function Login({ }) {
 
     async function verifyLogin(user: UserDto): Promise<AxiosResponse<any>> {
         const httpClient = createHttpClient();
-        return await httpClient.get(`/users/verifyLogin?user_name=${user.userId}&password=${user.password}`);
+        return await httpClient.get(`/users/verifyLogin?user_name=${user.userName}&password=${user.password}`);
     }
 
 
@@ -106,8 +106,8 @@ export default function Login({ }) {
                             <span className="input-group-text fixed-label-width text-right">Id</span>
                             <input
                                 className="form-control custom-input-width"
-                                name="userId"
-                                value={credentials.userId}
+                                name="userName"
+                                value={credentials.userName}
                                 onChange={handleIdChange}
                             />
                         </div>

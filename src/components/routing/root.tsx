@@ -1,14 +1,16 @@
 import "bootstrap/dist/css/bootstrap.css";
-import "../css/site.css"
-import "../css/layout.css"
-import { useState } from 'react';
+import "../../css/site.css"
+import "../../css/layout.css"
+import { useRef, useState } from 'react';
 import {
     useNavigate,
     Form,
     useLoaderData
 } from "react-router-dom";
-import { RoutingType } from '../common/data';
-import { isLoggedIn, loggedInUser } from './auth/authProvider';
+import { RoutingType } from '../../models/data';
+import { isLoggedIn, loggedInUser } from '../auth/authProvider';
+import { useErrorBoundary } from "react-error-boundary";
+import { createHttpClient } from "../../services/http-client-service";
 
 
 export async function action() {
@@ -33,12 +35,18 @@ export function loader(props: { request: any }) {
 export default function Root() {
     const [routingType, setRoutingType] = useState(RoutingType.AnonymousMain);
     const [user, setUser] = useState(null);
+    const divRef = useRef(null);
+    const { showBoundary } = useErrorBoundary();
 
     const loggedIn = isLoggedIn();
     const authenticatedUser = loggedInUser();
 
     if (loggedIn === false || authenticatedUser === null) {
         throw new Error("wrong approach");
+    }
+
+    function divClicked() {
+        showBoundary({ message: "test" });
     }
 
     //const navigate = useNavigate();
@@ -57,7 +65,7 @@ export default function Root() {
 
 
     return (
-        <div className="container-fluid px-0">
+        <div className="container-fluid px-0" ref={divRef} onClick={divClicked}>
             <div className="d-flex flex-column vh-100">
                 <div className="d-flex justify-content-between fixed-top py-1 custom-header-bg">
                     <Form action="/root">

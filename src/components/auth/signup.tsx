@@ -4,13 +4,12 @@ import {
     Form
 } from "react-router-dom";
 
-import { createUser } from "../../common/users";
 import { UserDto } from '../../models/user-models';
 
 export async function action(props: { request: any }) {
     const formData = await props.request.formData();
     const userDto = Object.fromEntries(formData) as UserDto;
-    await createUser(userDto);
+    //await createUser(userDto);
     return redirect('/auth/login');
 }
 

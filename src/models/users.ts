@@ -1,6 +1,6 @@
 import { matchSorter } from "match-sorter";
 import localforage from "localforage";
-import { UserDto } from "../models/user-models";
+import { UserDto } from "./user-models";
 
 
 
@@ -14,19 +14,19 @@ export async function getUsers(query?: string): Promise<UserDto[]> {
     return users;
 }
 
-export async function createUser(userDto: UserDto): Promise<UserDto> {
-    await fakeNetwork();
-    let user = { userId: userDto.userId, password: userDto.password, email: userDto.email };
-    let users = await getUsers();
-    users.unshift(user);
-    await set(users);
-    return user;
-}
+//export async function createUser(userDto: UserDto): Promise<UserDto> {
+//    await fakeNetwork();
+//    let user = { userId: userDto.userName, password: userDto.password, email: userDto.email };
+//    let users = await getUsers();
+//    users.unshift(user);
+//    await set(users);
+//    return user;
+//}
 
 export async function getUser(userDto: UserDto): Promise<UserDto | undefined> {
     await fakeNetwork();
     let users = await getUsers() as Array<UserDto>;
-    let user = users.filter(user => user.userId === userDto.userId && user.password === userDto.password).shift();
+    let user = users.filter(user => user.userName === userDto.userName && user.password === userDto.password).shift();
     return user;
 }
 

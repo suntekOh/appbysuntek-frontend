@@ -1,5 +1,4 @@
-import React from 'react';
-import { fakeAuthProvider } from './fakeAuthProvider'
+import React, { useEffect, useLayoutEffect } from 'react';
 import {
     useNavigate,
     useLocation,
@@ -8,41 +7,36 @@ import {
 } from "react-router-dom";
 import { SignedInUser } from '../../models/user-models';
 import { flushSync } from 'react-dom';
+import { IAuthInfoFromLocalService } from '../../services/auth-info-from-local-service';
 
 interface AuthContextType {
     user: SignedInUser;
-    signin: (user: SignedInUser | undefined, callback: VoidFunction) => void;
+    signin: (user: SignedInUser, callback: VoidFunction) => void;
     signout: (callback: VoidFunction) => void;
 }
 
 let AuthContext = React.createContext<AuthContextType>(null!);
 
-export function AuthProvider(): JSX.Element {
+export function AuthProvider({ authInfoFromLocalService }: { authInfoFromLocalService: IAuthInfoFromLocalService }): JSX.Element {
     let [user, setUser] = React.useState<any>(null);
-
-    let signin = (signedInUser: SignedInUser | undefined, callback: VoidFunction) => {
-        if (signedInUser) {
-            return fakeAuthProvider.signin(() => {
-                flushSync(() => {
-                    setUser({
-                        userId: signedInUser.userId,
-                        authToken: signedInUser.authToken
-                    });
-                });
-                callback();
+    let signin = (signedInUser: SignedInUser, callback: VoidFunction) => {
+        flushSync(() => {
+            setUser({
+                userName: signedInUser.userName
             });
-        }
+        })
+        authInfoFromLocalService.set(signedInUser.userName);
+        callback();
     };
 
     let signout = (callback: VoidFunction) => {
-        return fakeAuthProvider.signout(() => {
-            flushSync(() => {
-                setUser(null);
-            });
-            callback();
+        flushSync(() => {
+            setUser(null);
         });
-    };
-
+        authInfoFromLocalService.clear();
+        callback();
+    }
+    
     let value = { user, signin, signout };
 
     return (
@@ -52,9 +46,12 @@ export function AuthProvider(): JSX.Element {
         ) 
 }
 
+
+
 export function useAuth() {
     return React.useContext(AuthContext);
 }
+
 
 export function RequireAuth({ children }: { children: JSX.Element }) {
     let auth = useAuth();
@@ -79,7 +76,7 @@ export function isLoggedIn(): boolean {
 
 export function loggedInUser(): string {
     let auth = useAuth();
-    return auth?.user?.userId ?? "";
+    return auth?.user?.userName ?? "";
 }
 
 
@@ -93,7 +90,7 @@ function AuthStatus() {
 
     return (
         <p>
-            Welcome {auth.user.userId}!{" "}
+            Welcome {auth.user.userName}!{" "}
             <button
                 onClick={() => {
                     auth.signout(() => navigate("/"));
