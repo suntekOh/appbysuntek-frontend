@@ -1,17 +1,17 @@
-import React, { useEffect, useLayoutEffect } from 'react';
+import React from 'react';
 import {
     useNavigate,
     useLocation,
     Navigate,
     Outlet,
 } from "react-router-dom";
-import { SignedInUser } from '../../models/user-models';
+import { AuthenticatedUser } from '../../models/user-models';
 import { flushSync } from 'react-dom';
 import { IAuthInfoFromLocalService } from '../../services/auth-info-from-local-service';
 
-interface AuthContextType {
-    user: SignedInUser;
-    signin: (user: SignedInUser, callback: VoidFunction) => void;
+export interface AuthContextType {
+    user: AuthenticatedUser;
+    signin: (user: AuthenticatedUser, callback: VoidFunction) => void;
     signout: (callback: VoidFunction) => void;
 }
 
@@ -19,7 +19,7 @@ let AuthContext = React.createContext<AuthContextType>(null!);
 
 export function AuthProvider({ authInfoFromLocalService }: { authInfoFromLocalService: IAuthInfoFromLocalService }): JSX.Element {
     let [user, setUser] = React.useState<any>(null);
-    let signin = (signedInUser: SignedInUser, callback: VoidFunction) => {
+    let signin = (signedInUser: AuthenticatedUser, callback: VoidFunction) => {
         flushSync(() => {
             setUser({
                 userName: signedInUser.userName
@@ -39,6 +39,7 @@ export function AuthProvider({ authInfoFromLocalService }: { authInfoFromLocalSe
     
     let value = { user, signin, signout };
 
+
     return (
         <AuthContext.Provider value={value}>
             <Outlet/>
@@ -57,7 +58,6 @@ export function RequireAuth({ children }: { children: JSX.Element }) {
     let auth = useAuth();
     let location = useLocation();
 
-    console.log(auth)
     if (!auth.user) {
         // Redirect them to the /login page, but save the current location they were
         // trying to go to when they were redirected. This allows us to send them

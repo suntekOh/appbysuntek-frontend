@@ -4,6 +4,6 @@ export interface UserDto {
     email: string,
 }
 
-export interface SignedInUser {
+export interface AuthenticatedUser {
     userName: string,
 }

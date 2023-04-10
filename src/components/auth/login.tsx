@@ -7,7 +7,7 @@ import {
     useLocation
 } from "react-router-dom";
 
-import { SignedInUser, UserDto } from "../../models/user-models";
+import { AuthenticatedUser, UserDto } from "../../models/user-models";
 import { useAuth } from "./authProvider";
 import { createHttpClient } from "../../services/http-client-service";
 import { AxiosResponse } from "axios";
@@ -56,7 +56,7 @@ export default function Login({ }) {
             let response = await verifyLogin(userDto);
             if (response.status === 200) {
                 let from = location.state?.from?.pathname || "/root";
-                let user: SignedInUser = {
+                let user: AuthenticatedUser = {
                     userName: userDto.userName,
                 }
 
@@ -79,12 +79,10 @@ export default function Login({ }) {
                 alert(error.response.data?.message);
                 return;
             }
+
             showBoundary({ message: "Error Occurred during user verificaiton." });
             return;
         }
-
-        //let user = await getUser(userDto);
-
     }
 
     async function verifyLogin(user: UserDto): Promise<AxiosResponse<any>> {

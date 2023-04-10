@@ -9,16 +9,15 @@ import AuthRoot from "./components/auth/auth-root";
 import Login from "./components/auth/login";
 import ForgotPassword from './components/auth/forgot-password';
 import SignUp, { action as signUpAction } from './components/auth/signup';
-import RouteErrorPage from "./components/routing/error-components";
+import RouteErrorBoundary, { FallBackErrorBoundary } from "./components/routing/error-components";
 import { AuthProvider, RequireAuth } from './components/auth/authProvider';
 import Public from './components/routing/public';
-import { ErrorBoundary } from "react-error-boundary";
+import { ErrorBoundary, useErrorBoundary } from "react-error-boundary";
 import { NoMatch } from "./components/routing/no-match";
 import { IAuthInfoFromLocalService } from "./services/auth-info-from-local-service";
 import { container } from "tsyringe";
 import { customConstants } from "./models/constants";
-import { ProcessManualUrlChange } from "./components/routing/process-manual-url-change";
-
+import { RoomForAuthProviderAcquisition } from "./components/routing/room-for-authprovider-acquisition";
 
 function App() {
     const authInfoService = container.resolve<IAuthInfoFromLocalService>(customConstants.DI.IAuthInfoFromLocalService);
@@ -29,8 +28,8 @@ function App() {
                 element={<AuthProvider authInfoFromLocalService={authInfoService} />}
             >
                 <Route
-                    element={<ProcessManualUrlChange />}
-                    errorElement={<RouteErrorPage authInfoFromLocalService={authInfoService} />}
+                    element={<RoomForAuthProviderAcquisition />}
+                    errorElement={<RouteErrorBoundary authInfoFromLocalService={authInfoService} />}
                 >
                     <Route
                         element={
@@ -68,8 +67,7 @@ function App() {
                             action={signUpAction}
                         />
                     </Route>
-                    <Route path="*" element={<NoMatch />} />
-
+                    <Route path="*" element={<RouteErrorBoundary authInfoFromLocalService={authInfoService} />}/>
                 </Route>
 
             </Route>
@@ -77,7 +75,7 @@ function App() {
     );
 
     return (
-        <ErrorBoundary fallback={<div>Something went wrong</div>}>
+        <ErrorBoundary FallbackComponent={FallBackErrorBoundary}>
             <RouterProvider router={router} />
         </ErrorBoundary>
     );
