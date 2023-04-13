@@ -1,7 +1,7 @@
 import "../../css/login.css"
 import React, { useState, useRef } from 'react';
 import {
-    Form,
+    Form as RouterForm,
     redirect,
     useNavigate,
     useLocation
@@ -12,54 +12,43 @@ import { useAuth } from "./authProvider";
 import { createHttpClient } from "../../services/http-client-service";
 import { AxiosResponse } from "axios";
 import { useErrorBoundary } from "react-error-boundary";
+import Form from 'react-bootstrap/Form';
+import Row from "react-bootstrap/esm/Row";
+import InputGroup from "react-bootstrap/esm/InputGroup";
+import { Formik } from 'formik';
+import * as Yup from 'yup';
+import Button from "react-bootstrap/esm/Button";
+
+interface LoginFormValues {
+    username: string;
+    password: string;
+}
 
 export async function action(props: { request: any }) {
     return null;
 }
 
 export default function Login({ }) {
-    const [credentials, setCredentials] = useState({
-        userName: '',
-        password: ''
-    });
-
     const { showBoundary } = useErrorBoundary();
 
     let auth = useAuth();
     let location = useLocation();
     let navigate = useNavigate();
 
-
-    function handleIdChange(e: any) {
-        setCredentials({
-            ...credentials,
-            userName: e.target.value
-        })
-    }
-
-    function handlePasswordChange(e: any) {
-        setCredentials({
-            ...credentials,
-            password: e.target.value
-        })
-    }
-
-    async function handleLogin(event: React.FormEvent<HTMLFormElement>) {
+    async function handleLogin(form: LoginFormValues) {
         try {
-            event.preventDefault();
-            let formData = new FormData(event.currentTarget);
             const userDto: UserDto = {
-                userName: formData.get("userName") as string,
-                password: formData.get("password") as string,
+                userName: form.username,
+                password: form.password,
                 email: ""
             };
-            let response = await verifyLogin(userDto);
+
+            const response = await verifyLogin(userDto);
             if (response.status === 200) {
                 let from = location.state?.from?.pathname || "/root";
                 let user: AuthenticatedUser = {
                     userName: userDto.userName,
                 }
-
 
                 auth.signin(user, () => {
                     // Send them back to the page they tried to visit when they were
@@ -73,7 +62,7 @@ export default function Login({ }) {
 
             } else {
                 throw new Error();
-            } 
+            }
         } catch (error: any) {
             if (error?.response?.status) {
                 alert(error.response.data?.message);
@@ -92,50 +81,91 @@ export default function Login({ }) {
 
 
     return (
-        <div className="d-flex min-vh-100 justify-content-center align-items-center">
-            <div className="card custom-card-width">
-                <div className="card-header">Login
-                </div>
-                <div className="card-body d-flex flex-column">
-                    <h5 className="card-title"></h5>
-                    <p className="card-text">Please enter your credentials.</p>
-                    <form onSubmit={handleLogin}>
-                        <div className="input-group d-flex justify-content-center mb-2">
-                            <span className="input-group-text fixed-label-width text-right">Id</span>
-                            <input
-                                className="form-control custom-input-width"
-                                name="userName"
-                                value={credentials.userName}
-                                onChange={handleIdChange}
-                            />
+        <Formik
+            validationSchema={Yup.object().shape({
+                username: Yup.string().required('Username is required'),
+                password: Yup.string().required('Password is required'),
+            })}
+            onSubmit={handleLogin}
+            initialValues={{
+                username: '',
+                password: ''
+            }}
+        >
+            {({
+                handleSubmit,
+                handleChange,
+                handleBlur,
+                values,
+                touched,
+                isValid,
+                errors,
+            }) => (
+                <div className="d-flex min-vh-100 justify-content-center align-items-center">
+                    <div className="card custom-card-width">
+                        <div className="card-header">Login
                         </div>
-                        <div className="d-flex input-group justify-content-center mb-2">
-                            <span className="input-group-text fixed-label-width text-right">Password</span>
-                            <input
-                                type="password"
-                                className="form-control custom-input-width"
-                                name="password"
-                                value={credentials.password}
-                                onChange={handlePasswordChange}
-                            />
-                        </div>
-                        <div className="d-flex justify-content-center ">
-                            <button className="btn btn-primary custom-button-width" type="submit">Sign in</button>
-                        </div>
-                    </form>
+                        <div className="card-body d-flex flex-column">
+                            <h5 className="card-title"></h5>
+                            <p className="card-text">Please enter your credentials.</p>
 
-                    <div className="d-flex">
-                        <div className="d-flex flex-wrap justify-content-between custom-button-width">
-                            <Form action="/auth/forgotpassword">
-                                <button type="submit" className="btn btn-link">forgot password</button>
+                            <Form noValidate onSubmit={handleSubmit}>
+                                <Row className="mb-2">
+                                    <InputGroup hasValidation>
+                                        <InputGroup.Text id="user-name" className="fixed-label-width text-right">Username</InputGroup.Text>
+                                        <Form.Control
+                                            className="custom-input-width"
+                                            type="text"
+                                            aria-describedby="user-name"
+                                            name="username"
+                                            value={values.username}
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                            isInvalid={!!errors.username && touched.username}
+                                        />
+                                        <Form.Control.Feedback type="invalid">
+                                            {touched.username && errors.username ? errors.username : null}
+                                        </Form.Control.Feedback>
+                                    </InputGroup>
+                                </Row>
+                                <Row className="mb-2">
+                                    <InputGroup hasValidation>
+                                        <InputGroup.Text id="password" className="fixed-label-width text-right">Password</InputGroup.Text>
+                                        <Form.Control
+                                            className="custom-input-width"
+                                            type="password"
+                                            aria-describedby="password"
+                                            name="password"
+                                            value={values.password}
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                            isInvalid={!!errors.password && touched.password}
+                                        />
+                                        <Form.Control.Feedback type="invalid">
+                                            {touched.password && errors.password ? errors.password : null}
+                                        </Form.Control.Feedback>
+                                    </InputGroup>
+                                </Row>
+                                <Row>
+                                    <InputGroup>
+                                        <Button type="submit" className="custom-button-width">Sign In</Button>
+                                    </InputGroup>
+                                </Row>
                             </Form>
-                            <Form action="/auth/signup">
-                                <button type="submit" className="btn btn-link">sign up</button>
-                            </Form>
+                            <div className="d-flex">
+                                <div className="d-flex flex-wrap justify-content-between custom-button-width">
+                                    <RouterForm action="/auth/forgotpassword">
+                                        <button type="submit" className="btn btn-link">forgot password</button>
+                                    </RouterForm>
+                                    <RouterForm action="/auth/signup">
+                                        <button type="submit" className="btn btn-link">sign up</button>
+                                    </RouterForm>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
+            )}
+        </Formik>
     )
 }

@@ -74,7 +74,7 @@ export function isLoggedIn(): boolean {
     return auth?.user != null;
 }
 
-export function loggedInUser(): string {
+export function getUserNameFromAuth(): string {
     let auth = useAuth();
     return auth?.user?.userName ?? "";
 }

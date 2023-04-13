@@ -1,14 +1,13 @@
 import "bootstrap/dist/css/bootstrap.css";
 import "../../css/site.css"
 import "../../css/layout.css"
-import { useRef, useState } from 'react';
 import {
     useNavigate,
     Form,
     useLoaderData
 } from "react-router-dom";
 import { RoutingType } from '../../models/data';
-import { isLoggedIn, loggedInUser } from '../auth/authProvider';
+import { isLoggedIn, getUserNameFromAuth, useAuth } from '../auth/authProvider';
 import { useErrorBoundary } from "react-error-boundary";
 import { createHttpClient } from "../../services/http-client-service";
 
@@ -32,46 +31,41 @@ export function loader(props: { request: any }) {
     //};
 }
 
-export default function Root() {
-    const [routingType, setRoutingType] = useState(RoutingType.AnonymousMain);
-    const [user, setUser] = useState(null);
-    const divRef = useRef(null);
+export default function ProtectedRoot() {
     const { showBoundary } = useErrorBoundary();
+    const auth = useAuth();
+    const navigate = useNavigate();
+    const userName = getUserNameFromAuth();
 
-    const loggedIn = isLoggedIn();
-    const authenticatedUser = loggedInUser();
+    function handleSignOut(e: React.FormEvent<HTMLFormElement>) {
+        e.preventDefault();
+        try {
+            auth.signout(() => {
+                navigate("/", { replace: true });
+            })
 
-    if (loggedIn === false || authenticatedUser === null) {
-        throw new Error("wrong approach");
+        } catch (err: any) {
+            showBoundary(err);
+        }
     }
 
-    function divClicked() {
-        showBoundary({ message: "test" });
-    }
-
-    //const navigate = useNavigate();
-    //const handelGoToIdentity = () => {
-    //    navigate('/identity/login')
-    //}
-
-    //const content =
-    //    routingType === RoutingType.AnonymousMain ? <AnonymousMain></AnonymousMain> :
-    //        routingType === RoutingType.UserMain ? <UserMain></UserMain> :
-    //            routingType === RoutingType.Authentication ?
-    //                <Authentication handleUserAuthenticated={(u) => setUser(u)} handleRoutingType={(r) => setRoutingType(r)}>
-    //                </Authentication> : <Error></Error>
 
     const content = <div>welcome to protected page</div>;
 
 
     return (
-        <div className="container-fluid px-0" ref={divRef} onClick={divClicked}>
+        <div className="container-fluid px-0">
             <div className="d-flex flex-column vh-100">
                 <div className="d-flex justify-content-between fixed-top py-1 custom-header-bg">
                     <Form action="/root">
                         <button type="submit" className="btn btn-link p-2">Home</button>
                     </Form>
-                    <div className="d-flex flex-nowrap text-nowrap text-white p-2">Welcome {authenticatedUser}!</div>
+                    <div className="d-flex align-items-center text-white px-2">
+                        <form onSubmit={handleSignOut}>
+                            <button type="submit" className="btn btn-link px-2">Sign Out</button>
+                        </form>
+                        Welcome {userName}!
+                    </div>
                 </div>
 
                 <div className="flex-grow-1 d-flex flex-wrap content-padding-top">

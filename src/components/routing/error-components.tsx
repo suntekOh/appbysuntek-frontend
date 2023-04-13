@@ -1,36 +1,46 @@
-cimport { NavigateFunction, useNavigate, useRouteError } from "react-router-dom";
+import { NavigateFunction, useLocation, useNavigate, useRouteError } from "react-router-dom";
 import { IAuthInfoFromLocalService } from "../../services/auth-info-from-local-service";
 import { useAuth, AuthContextType } from "../auth/authProvider";
 
-export default function RouteErrorBoundary({ authInfoFromLocalService }: { authInfoFromLocalService: IAuthInfoFromLocalService }) {
+const defaultErrorHandler = (
+    e: React.FormEvent<HTMLFormElement>,
+    auth?: AuthContextType,
+    navigate?: NavigateFunction,
+    authInfoService?: IAuthInfoFromLocalService
+):void => {
+    e.preventDefault();
+
+    if (auth && navigate && authInfoService) {
+        const signedInUserName = authInfoService.getAuthenticatedUserNameFromLocal();
+        if (signedInUserName) {
+            auth.signin(
+                { userName: signedInUserName },
+                () => {
+                    navigate("/root", { replace: true });
+                }
+            );
+        } else {
+            navigate("/", { replace: true });
+        }
+    }
+}
+
+export default function RouteErrorBoundary({ authInfoService }: { authInfoService: IAuthInfoFromLocalService }) {
     const error = useRouteError() as any;
-    console.log(error.message);
+    console.error(error?.message, error?.stack);
     const auth = useAuth();
     const navigate = useNavigate();
 
-    function errorHandler(
-        e: React.FormEvent<HTMLFormElement>,
-        auth?: AuthContextType,
-        navigate?: NavigateFunction
-    ) {
-        e.preventDefault();
+    return <ErrorLayout error={error} auth={auth} navigate={navigate} authInfoService={authInfoService} errorHandler={defaultErrorHandler} />
+}
 
-        const signedInUserName = authInfoFromLocalService.getSignedInUserName();
-        if (auth && navigate) {
-            if (signedInUserName) {
-                auth.signin(
-                    { userName: signedInUserName },
-                    () => {
-                        navigate("/root", { replace: true });
-                    }
-                );
-            } else {
-                navigate("/", { replace: true });
-            }
-        }
-    }
+export function NotFound({ authInfoService }: { authInfoService: IAuthInfoFromLocalService }) {
+    const error = { message: "Not Found" };
+    console.error(error?.message);
+    const auth = useAuth();
+    const navigate = useNavigate();
 
-    return <ErrorLayout error={error} auth={auth} navigate={navigate} errorHandler={errorHandler} />
+    return <ErrorLayout error={error} auth={auth} navigate={navigate} authInfoService={authInfoService} errorHandler={defaultErrorHandler} />
 }
 
 export function FallBackErrorBoundary({ error, resetErrorBoundary } : { error: any, resetErrorBoundary: any }) {
@@ -43,15 +53,15 @@ export function FallBackErrorBoundary({ error, resetErrorBoundary } : { error: a
 }
 
 
-function ErrorLayout({ error, auth, navigate, errorHandler }: { error: any, auth?: AuthContextType, navigate?: NavigateFunction, errorHandler: (e: React.FormEvent<HTMLFormElement>, auth?: AuthContextType, navigate?: NavigateFunction) => void; }): JSX.Element {
+function ErrorLayout({ error, auth, navigate, authInfoService, errorHandler }: { error: any, auth?: AuthContextType, navigate?: NavigateFunction, authInfoService?: IAuthInfoFromLocalService, errorHandler: (e: React.FormEvent<HTMLFormElement>, auth?: AuthContextType, navigate?: NavigateFunction, authInfoFromLocalService?: IAuthInfoFromLocalService) => void; }): JSX.Element {
     return (
         <div id="error-page" className="px-2">
             <h1>Oops!</h1>
             <p>Sorry, an unexpected error has occurred.</p>
             <p>
-                <i>{error.statusText || error.message}</i>
+                <i>{error?.statusText || error?.message}</i>
             </p>
-            <form onSubmit={(e) => errorHandler(e, auth, navigate)}>
+            <form onSubmit={(e) => errorHandler(e, auth, navigate, authInfoService)}>
                 <button className="btn btn-link custom-button-width" type="submit">Home</button>
             </form>
 

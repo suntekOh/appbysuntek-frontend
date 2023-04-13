@@ -4,12 +4,12 @@ import {
     createRoutesFromElements,
     Route,
 } from "react-router-dom";
-import Root, { loader as rootLoader, action as rootAction } from "./components/routing/root";
+import ProtectedRoot, { loader as rootLoader, action as rootAction } from "./components/routing/protected-root";
 import AuthRoot from "./components/auth/auth-root";
 import Login from "./components/auth/login";
 import ForgotPassword from './components/auth/forgot-password';
 import SignUp, { action as signUpAction } from './components/auth/signup';
-import RouteErrorBoundary, { FallBackErrorBoundary } from "./components/routing/error-components";
+import RouteErrorBoundary, { FallBackErrorBoundary, NotFound } from "./components/routing/error-components";
 import { AuthProvider, RequireAuth } from './components/auth/authProvider';
 import Public from './components/routing/public';
 import { ErrorBoundary, useErrorBoundary } from "react-error-boundary";
@@ -29,7 +29,7 @@ function App() {
             >
                 <Route
                     element={<RoomForAuthProviderAcquisition />}
-                    errorElement={<RouteErrorBoundary authInfoFromLocalService={authInfoService} />}
+                    errorElement={<RouteErrorBoundary authInfoService={authInfoService} />}
                 >
                     <Route
                         element={
@@ -41,7 +41,7 @@ function App() {
                     <Route
                         element={
                             <RequireAuth>
-                                <Root />
+                                <ProtectedRoot />
                             </RequireAuth>
                         }
                         path="/root"
@@ -67,7 +67,7 @@ function App() {
                             action={signUpAction}
                         />
                     </Route>
-                    <Route path="*" element={<RouteErrorBoundary authInfoFromLocalService={authInfoService} />}/>
+                    <Route path="*" element={<NotFound authInfoService={authInfoService} />} />
                 </Route>
 
             </Route>

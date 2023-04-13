@@ -8,7 +8,7 @@ export interface AuthInfoFromLocalDto {
 export interface IAuthInfoFromLocalService {
     set: (userName: string) => void;
     getDestination: () => string;
-    getSignedInUserName: () => string | null;
+    getAuthenticatedUserNameFromLocal: () => string | null;
     clear: () => void;
 }
 
@@ -34,7 +34,7 @@ export class AuthInfoFromLocalService implements IAuthInfoFromLocalService {
         return this.isAuthValid() ? "/root" : "/";
     }
 
-    getSignedInUserName() {
+    getAuthenticatedUserNameFromLocal() {
         return this.isAuthValid() ? this.get()?.userName ?? "" : null;
     }
 
