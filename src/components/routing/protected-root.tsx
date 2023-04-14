@@ -4,31 +4,17 @@ import "../../css/layout.css"
 import {
     useNavigate,
     Form,
-    useLoaderData
 } from "react-router-dom";
-import { RoutingType } from '../../models/data';
-import { isLoggedIn, getUserNameFromAuth, useAuth } from '../auth/authProvider';
+import { getUserNameFromAuth, useAuth } from '../auth/authProvider';
 import { useErrorBoundary } from "react-error-boundary";
-import { createHttpClient } from "../../services/http-client-service";
 
 
 export async function action() {
     return null;
-    //let contact = await createContact();
-    //return redirect(`/contacts/${contact.id}/edit`);
 }
 
 export function loader(props: { request: any }) {
     return null;
-
-    //const url = new URL(request.url);
-    //const q = url.searchParams.get("q");
-/*    const contacts = await getContacts(q);*/
-    //return {
-    //    contacts,
-    //    q,
-    //    firstContact: q ? contacts[0] : null,
-    //};
 }
 
 export default function ProtectedRoot() {

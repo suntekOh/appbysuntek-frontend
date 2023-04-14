@@ -1,4 +1,4 @@
-import { NavigateFunction, useLocation, useNavigate, useRouteError } from "react-router-dom";
+import { NavigateFunction, useNavigate, useRouteError } from "react-router-dom";
 import { IAuthInfoFromLocalService } from "../../services/auth-info-from-local-service";
 import { useAuth, AuthContextType } from "../auth/authProvider";
 
@@ -34,7 +34,7 @@ export default function RouteErrorBoundary({ authInfoService }: { authInfoServic
     return <ErrorLayout error={error} auth={auth} navigate={navigate} authInfoService={authInfoService} errorHandler={defaultErrorHandler} />
 }
 
-export function NotFound({ authInfoService }: { authInfoService: IAuthInfoFromLocalService }) {
+export function NoMatch({ authInfoService }: { authInfoService: IAuthInfoFromLocalService }) {
     const error = { message: "Not Found" };
     console.error(error?.message);
     const auth = useAuth();

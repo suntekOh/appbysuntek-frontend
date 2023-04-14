@@ -9,11 +9,10 @@ import AuthRoot from "./components/auth/auth-root";
 import Login from "./components/auth/login";
 import ForgotPassword from './components/auth/forgot-password';
 import SignUp, { action as signUpAction } from './components/auth/signup';
-import RouteErrorBoundary, { FallBackErrorBoundary, NotFound } from "./components/routing/error-components";
+import RouteErrorBoundary, { FallBackErrorBoundary, NoMatch } from "./components/routing/error-components";
 import { AuthProvider, RequireAuth } from './components/auth/authProvider';
 import Public from './components/routing/public';
-import { ErrorBoundary, useErrorBoundary } from "react-error-boundary";
-import { NoMatch } from "./components/routing/no-match";
+import { ErrorBoundary } from "react-error-boundary";
 import { IAuthInfoFromLocalService } from "./services/auth-info-from-local-service";
 import { container } from "tsyringe";
 import { customConstants } from "./models/constants";
@@ -67,7 +66,7 @@ function App() {
                             action={signUpAction}
                         />
                     </Route>
-                    <Route path="*" element={<NotFound authInfoService={authInfoService} />} />
+                    <Route path="*" element={<NoMatch authInfoService={authInfoService} />} />
                 </Route>
 
             </Route>

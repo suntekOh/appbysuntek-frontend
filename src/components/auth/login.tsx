@@ -18,6 +18,7 @@ import InputGroup from "react-bootstrap/esm/InputGroup";
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import Button from "react-bootstrap/esm/Button";
+import * as util from 'util';
 
 interface LoginFormValues {
     username: string;
@@ -76,7 +77,8 @@ export default function Login({ }) {
 
     async function verifyLogin(user: UserDto): Promise<AxiosResponse<any>> {
         const httpClient = createHttpClient();
-        return await httpClient.get(`/users/verifyLogin?user_name=${user.userName}&password=${user.password}`);
+        const url = util.format(process.env.REACT_APP_API_VERIFYLOGIN as string, user.userName, user.password);
+        return await httpClient.get(url);
     }
 
 

@@ -1,8 +1,4 @@
-import { useState } from 'react';
 import {
-    redirect,
-    Form as RouterForm,
-    useLocation,
     useNavigate
 } from "react-router-dom";
 
@@ -27,6 +23,7 @@ interface SignUpFormValues {
 
 
 export async function action(props: { request: any }) {
+    return null;
 }
 
 export default function SignUp() {
@@ -63,7 +60,8 @@ export default function SignUp() {
 
     async function createUser(user: UserDto): Promise<AxiosResponse<any>> {
         const httpClient = createHttpClient();
-        return await httpClient.post('/users/register', {
+        const url = process.env.REACT_APP_API_REGISTER as string;
+        return await httpClient.post(url, {
             userName: user.userName,
             firstName: user.firstName,
             lastName: user.lastName,
