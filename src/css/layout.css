@@ -1,31 +1,199 @@
-.custom-bg-gray {
-    background-color: gray
+/*home*/
+
+.home-header {
+    background-color: #0F0F11;
 }
 
-.custom-header-bg {
-    background-color: #20232a;
+
+.custom-bg-gray {
+    background-color: gray
 }
 
 .custom-footer-bg {
     background-color: #e2e2e2;
 }
 
-
-.content-padding-top {
-    padding-block-start: 56px;
+.btn.home-search-bar-submit {
+    background-color: #febd69;
+    border: none;
 }
+
+    .btn.home-search-bar-submit:hover, .btn.home-search-bar-submit:focus {
+        background-color: #f3a847;
+    }
+
+
+.home-search-bar-input:focus {
+    box-shadow: none;
+    border: 1px solid #ced4da;
+}
+
+.home-search-bar-form:focus-within {
+    background-color: #f3a847;
+    -webkit-box-shadow: 0 0 0 2px #F90,0 0 0 3px rgba(255,153,0,.5);
+    -moz-box-shadow: 0 0 0 2px #F90,0 0 0 3px rgba(255,153,0,.5);
+    box-shadow: 0 0 0 2px #F90,0 0 0 3px rgba(255,153,0,.5);
+    z-index: 1
+}
+
+.home-navbar1 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+    .home-navbar1 .account-dropdown {
+        display: flex;
+        flex-direction:column;
+    }
+
+    .home-navbar1:has(.dropdown-toggle:hover), .home-navbar1:has(.dropdown-toggle:focus) {
+        border: 1px solid white;
+        background-color: inherit;
+    }
+
+    .home-navbar1 .account-dropdown .dropdown-toggle {
+        display: flex;
+        font-size: 12px;
+        align-items: center;
+        justify-content: center;
+        background-color: inherit;
+        border: none;
+        color: white;
+        text-decoration: none;
+        font-weight: bold;
+
+    }
+
+    .home-navbar1 .account-dropdown .firstrow-text {
+        color: white;
+        font-size: 11px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        width:100px;
+    }
+
+.dropdown .dropdown-menu {
+    font-size: 12px;
+}
+
+    .dropdown .custom-menu.dropdown-menu.show {
+        padding-right: 8px;
+        padding-left: 8px;
+    }
+
+
+    .dropdown .dropdown-menu .btn.signin-submit {
+        width: 220px;
+        height: 33px;
+        font-size: 13px;
+        background-color: #FFD814;
+        border: #FCD200 1px solid;
+        color: #111;
+        font-weight: 500;
+    }
+
+        .dropdown .dropdown-menu .btn.signin-submit:hover, .dropdown .dropdown-menu .btn.signin-submit:focus {
+            text-decoration: underline;
+        }
+
+    .dropdown .dropdown-menu .first-row {
+        padding-right: 12px;
+        padding-left: 12px;
+        text-align: center;
+        border-bottom: 1px solid grey;
+    }
+
+        .dropdown .dropdown-menu .first-row .signup-body {
+            padding-block-start: 4px;
+            padding-block-end: 0px;
+            margin-bottom: 2px;
+            font-size: 10px;
+            color: #333;
+        }
+
+        .dropdown .dropdown-menu .first-row .signup-body .signup-link {
+            padding-left: 2px;
+            color: #05a;
+        }
+
+
+    .dropdown .dropdown-menu .dropdown-item:hover, .dropdown .dropdown-menu .dropdown-item:focus {
+        background-color: inherit;
+        text-decoration: underline;
+        color: #f08804;
+    }
+
+    .dropdown .dropdown-menu .col.border-line-right {
+        border-right: 1px solid grey;
+    }
+
+    .dropdown .dropdown-menu .col.border-line-left {
+        border-left: 1px solid grey;
+    }
 
 
 @media screen and (min-width: 576px) {
     .sidebar-fixed-width {
         width: 200px;
     }
+
+    .input-group .home-category-dropdown.form-select {
+        flex: 0 0 150px;
+        background-color: #F3F3F3;
+        font-size: 12px;
+    }
+
+        .input-group .home-category-dropdown.form-select:focus {
+            box-shadow: none;
+            border: 1px solid #ced4da;
+        }
+
+    .dropdown .dropdown-menu .row {
+        flex-wrap: nowrap;
+        margin: 0px;
+    }
 }
 
-/* On screens that are 600px or less, set the background color to olive */
 @media screen and (max-width: 576px) {
 
     .sidebar-fixed-width {
         width: auto;
     }
+
+    .input-group .home-category-dropdown.form-select {
+        flex: 0 0 100px;
+        background-color: #F3F3F3;
+        font-size: 12px;
+    }
+
+        .input-group .home-category-dropdown.form-select:focus {
+            box-shadow: none;
+            border: 1px solid #ced4da;
+        }
+
+    .dropdown .dropdown-menu .row {
+        flex-wrap: wrap;
+        margin: 0px;
+    }
+}
+
+/*signin*/
+.signin-form .fixed-label-width {
+    flex: 0 0 150px;
+}
+
+
+.signin-form .custom-card-width {
+    flex: 0 0 500px;
+}
+
+/*signup*/
+.signup-form .fixed-label-width {
+    flex: 0 0 170px;
+}
+
+.signup-form .custom-card-width {
+    flex: 0 0 500px;
 }

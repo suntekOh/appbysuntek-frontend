@@ -4,22 +4,24 @@ import {
     createRoutesFromElements,
     Route,
 } from "react-router-dom";
-import ProtectedRoot, { loader as rootLoader, action as rootAction } from "./components/routing/protected-root";
+import AuthenticatedHome, { action as rootAction } from "./components/home/authenticated-home";
 import AuthRoot from "./components/auth/auth-root";
-import Login from "./components/auth/login";
+import Signin from "./components/auth/signin";
 import ForgotPassword from './components/auth/forgot-password';
 import SignUp, { action as signUpAction } from './components/auth/signup';
 import RouteErrorBoundary, { FallBackErrorBoundary, NoMatch } from "./components/routing/error-components";
 import { AuthProvider, RequireAuth } from './components/auth/authProvider';
-import Public from './components/routing/public';
+import AnonymousHome from './components/home/anonymous-home';
 import { ErrorBoundary } from "react-error-boundary";
 import { IAuthInfoFromLocalService } from "./services/auth-info-from-local-service";
 import { container } from "tsyringe";
 import { customConstants } from "./models/constants";
 import { RoomForAuthProviderAcquisition } from "./components/routing/room-for-authprovider-acquisition";
+import { IFakeApi } from "./services/fake-api";
 
 function App() {
     const authInfoService = container.resolve<IAuthInfoFromLocalService>(customConstants.DI.IAuthInfoFromLocalService);
+    const fakeApi = container.resolve<IFakeApi>(customConstants.DI.IFakeApi);
 
     const router = createBrowserRouter(
         createRoutesFromElements(
@@ -32,19 +34,24 @@ function App() {
                 >
                     <Route
                         element={
-                            <Public />
+                            <AnonymousHome />
                         }
                         path="/"
+                        loader={async () => {
+                            return await fakeApi.getAllProductCategories(-1)
+                        }}
                     >
                     </Route>
                     <Route
                         element={
                             <RequireAuth>
-                                <ProtectedRoot />
+                                <AuthenticatedHome />
                             </RequireAuth>
                         }
                         path="/root"
-                        loader={rootLoader}
+                        loader={async () => {
+                            return await fakeApi.getAllProductCategories(-1)
+                        }}
                         action={rootAction}
                     >
                     </Route>
@@ -53,8 +60,8 @@ function App() {
                         path="/auth"
                     >
                         <Route
-                            path="login"
-                            element={<Login />}
+                            path="signin"
+                            element={<Signin />}
                         />
                         <Route
                             path="forgotpassword"

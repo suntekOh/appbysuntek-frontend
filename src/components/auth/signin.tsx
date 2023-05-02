@@ -1,4 +1,3 @@
-import "../../css/login.css"
 import React, { useState, useRef } from 'react';
 import {
     Form as RouterForm,
@@ -19,8 +18,9 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import Button from "react-bootstrap/esm/Button";
 import * as util from 'util';
+import "../../css/layout.css"
 
-interface LoginFormValues {
+interface SigninFormValues {
     username: string;
     password: string;
 }
@@ -29,14 +29,14 @@ export async function action(props: { request: any }) {
     return null;
 }
 
-export default function Login({ }) {
+export default function Signin({ }) {
     const { showBoundary } = useErrorBoundary();
 
     let auth = useAuth();
     let location = useLocation();
     let navigate = useNavigate();
 
-    async function handleLogin(form: LoginFormValues) {
+    async function handleSignin(form: SigninFormValues) {
         try {
             const userDto: UserDto = {
                 userName: form.username,
@@ -44,7 +44,7 @@ export default function Login({ }) {
                 email: ""
             };
 
-            const response = await verifyLogin(userDto);
+            const response = await verifySignin(userDto);
             if (response.status === 200) {
                 let from = location.state?.from?.pathname || "/root";
                 let user: AuthenticatedUser = {
@@ -75,7 +75,7 @@ export default function Login({ }) {
         }
     }
 
-    async function verifyLogin(user: UserDto): Promise<AxiosResponse<any>> {
+    async function verifySignin(user: UserDto): Promise<AxiosResponse<any>> {
         const httpClient = createHttpClient();
         const url = util.format(process.env.REACT_APP_API_VERIFYLOGIN as string, user.userName, user.password);
         return await httpClient.get(url);
@@ -88,7 +88,7 @@ export default function Login({ }) {
                 username: Yup.string().required('Username is required'),
                 password: Yup.string().required('Password is required'),
             })}
-            onSubmit={handleLogin}
+            onSubmit={handleSignin}
             initialValues={{
                 username: '',
                 password: ''
@@ -103,9 +103,9 @@ export default function Login({ }) {
                 isValid,
                 errors,
             }) => (
-                <div className="d-flex min-vh-100 justify-content-center align-items-center">
+                <div className="d-flex min-vh-100 justify-content-center align-items-center signin-form">
                     <div className="card custom-card-width">
-                        <div className="card-header">Login
+                        <div className="card-header">Sign in
                         </div>
                         <div className="card-body d-flex flex-column">
                             <h5 className="card-title"></h5>
@@ -150,12 +150,12 @@ export default function Login({ }) {
                                 </Row>
                                 <Row>
                                     <InputGroup>
-                                        <Button type="submit" className="custom-button-width">Sign In</Button>
+                                        <Button type="submit" className="w-100">Sign In</Button>
                                     </InputGroup>
                                 </Row>
                             </Form>
                             <div className="d-flex">
-                                <div className="d-flex flex-wrap justify-content-between custom-button-width">
+                                <div className="d-flex flex-wrap justify-content-between w-100 px-1">
                                     <RouterForm action="/auth/forgotpassword">
                                         <button type="submit" className="btn btn-link">forgot password</button>
                                     </RouterForm>

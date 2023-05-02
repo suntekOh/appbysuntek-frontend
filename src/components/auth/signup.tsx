@@ -1,5 +1,6 @@
 import {
-    useNavigate
+    useNavigate,
+    Form as RouterForm
 } from "react-router-dom";
 
 import { UserDto } from '../../models/user-models';
@@ -13,6 +14,7 @@ import { useErrorBoundary } from 'react-error-boundary';
 import { useAuth } from './authProvider';
 import { createHttpClient } from '../../services/http-client-service';
 import { AxiosResponse } from 'axios';
+import "../../css/layout.css"
 
 interface SignUpFormValues {
     username: string;
@@ -42,7 +44,7 @@ export default function SignUp() {
 
             if (response.status === 200) {
                 alert('success')
-                navigate("/auth/login", { replace: true });
+                navigate("/auth/signin", { replace: true });
             } else {
                 throw new Error();
             }
@@ -68,7 +70,6 @@ export default function SignUp() {
             email: user.email,
             password: user.password
         })
-        //return await httpClient.get(`/users/verifyLogin?user_name=${user.userName}&password=${user.password}`);
     }
 
     return (
@@ -96,7 +97,7 @@ export default function SignUp() {
                 isValid,
                 errors,
             }) => (
-                <div className="d-flex min-vh-100 justify-content-center align-items-center">
+                <div className="d-flex min-vh-100 justify-content-center align-items-center signup-form">
                     <div className="card custom-card-width">
                         <div className="card-header">Sign Up
                         </div>
@@ -181,9 +182,19 @@ export default function SignUp() {
                                 </Row>
                                 <Row>
                                     <InputGroup>
-                                        <Button type="submit" className="custom-button-width">Sign Up</Button>
+                                        <Button type="submit" className="w-100">Sign Up</Button>
                                     </InputGroup>
                                 </Row>
+                                <div className="d-flex">
+                                    <div className="d-flex flex-wrap justify-content-between w-100 px-1">
+                                        <RouterForm action="/auth/signin">
+                                            <button type="submit" className="btn btn-link">Sign in </button>
+                                        </RouterForm>
+                                        <RouterForm action="/">
+                                            <button type="submit" className="btn btn-link">Go back home</button>
+                                        </RouterForm>
+                                    </div>
+                                </div>
                             </div>
                         </Form>
                     </div>

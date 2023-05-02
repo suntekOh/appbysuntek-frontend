@@ -7,12 +7,22 @@ import App from './App';
 import { container, Lifecycle } from 'tsyringe';
 import { customConstants } from './models/constants';
 import { AuthInfoFromLocalService } from './services/auth-info-from-local-service';
+import "bootstrap/dist/css/bootstrap.css";
+import "./css/site.css"
+import "./css/layout.css"
+import { FakeApi } from "./services/fake-api";
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
 container.register(
     customConstants.DI.IAuthInfoFromLocalService,
     { useClass: AuthInfoFromLocalService },
+    { lifecycle: Lifecycle.Singleton }
+);
+
+container.register(
+    customConstants.DI.IFakeApi,
+    { useClass: FakeApi },
     { lifecycle: Lifecycle.Singleton }
 );
 
