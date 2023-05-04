@@ -13,7 +13,6 @@ import Row from 'react-bootstrap/esm/Row';
 import Col from 'react-bootstrap/esm/Col';
 import React from 'react';
 import { HomeHeaderType, HomeNavMenu } from '../../models/enums';
-import "../../css/layout.css"
 import { useErrorBoundary } from 'react-error-boundary';
 import { getUserNameFromAuth, useAuth } from '../auth/authProvider';
 

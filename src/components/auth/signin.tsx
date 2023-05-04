@@ -18,7 +18,6 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import Button from "react-bootstrap/esm/Button";
 import * as util from 'util';
-import "../../css/layout.css"
 
 interface SigninFormValues {
     username: string;
@@ -157,10 +156,10 @@ export default function Signin({ }) {
                             <div className="d-flex">
                                 <div className="d-flex flex-wrap justify-content-between w-100 px-1">
                                     <RouterForm action="/auth/forgotpassword">
-                                        <button type="submit" className="btn btn-link">forgot password</button>
+                                        <button type="submit" className="btn btn-link"><span>forgot password</span></button>
                                     </RouterForm>
                                     <RouterForm action="/auth/signup">
-                                        <button type="submit" className="btn btn-link">sign up</button>
+                                        <button type="submit" className="btn btn-link"><span>sign up</span></button>
                                     </RouterForm>
                                 </div>
                             </div>

@@ -1,5 +1,4 @@
 import "reflect-metadata";
-import './index.css';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom/client';
 import reportWebVitals from './reportWebVitals';
@@ -9,7 +8,7 @@ import { customConstants } from './models/constants';
 import { AuthInfoFromLocalService } from './services/auth-info-from-local-service';
 import "bootstrap/dist/css/bootstrap.css";
 import "./css/site.css"
-import "./css/layout.css"
+import "./css/all.css"
 import { FakeApi } from "./services/fake-api";
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);

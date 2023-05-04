@@ -1,5 +1,4 @@
 /*home*/
-
 .home-header {
     background-color: #0F0F11;
 }
@@ -13,20 +12,34 @@
     background-color: #e2e2e2;
 }
 
-.btn.home-search-bar-submit {
+.btn.btn-primary.home-search-bar-submit {
     background-color: #febd69;
     border: none;
 }
 
-    .btn.home-search-bar-submit:hover, .btn.home-search-bar-submit:focus {
+    .btn.btn-primary.home-search-bar-submit:hover, .btn.btn-primary.home-search-bar-submit:focus {
         background-color: #f3a847;
     }
 
-
-.home-search-bar-input:focus {
-    box-shadow: none;
-    border: 1px solid #ced4da;
+.input-group .form-control.home-search-bar-input {
+    flex: 1 1 200px;
 }
+
+    .input-group .form-control.home-search-bar-input:focus {
+        box-shadow: none;
+        border: 1px solid #ced4da;
+    }
+
+.input-group .home-category-dropdown.form-select {
+    background-color: #F3F3F3;
+    font-size: 12px;
+    flex: 0 1 150px;
+}
+
+    .input-group .home-category-dropdown.form-select:focus {
+        box-shadow: none;
+        border: 1px solid #ced4da;
+    }
 
 .home-search-bar-form:focus-within {
     background-color: #f3a847;
@@ -134,66 +147,55 @@
     }
 
 
+
+.dropdown .dropdown-menu .row {
+    flex-wrap: nowrap;
+    margin: 0px;
+}
+
+
 @media screen and (min-width: 576px) {
     .sidebar-fixed-width {
         width: 200px;
     }
-
-    .input-group .home-category-dropdown.form-select {
-        flex: 0 0 150px;
-        background-color: #F3F3F3;
-        font-size: 12px;
-    }
-
-        .input-group .home-category-dropdown.form-select:focus {
-            box-shadow: none;
-            border: 1px solid #ced4da;
-        }
-
-    .dropdown .dropdown-menu .row {
-        flex-wrap: nowrap;
-        margin: 0px;
-    }
 }
 
 @media screen and (max-width: 576px) {
-
     .sidebar-fixed-width {
         width: auto;
     }
-
-    .input-group .home-category-dropdown.form-select {
-        flex: 0 0 100px;
-        background-color: #F3F3F3;
-        font-size: 12px;
-    }
-
-        .input-group .home-category-dropdown.form-select:focus {
-            box-shadow: none;
-            border: 1px solid #ced4da;
-        }
-
-    .dropdown .dropdown-menu .row {
-        flex-wrap: wrap;
-        margin: 0px;
-    }
 }
+
 
 /*signin*/
-.signin-form .fixed-label-width {
-    flex: 0 0 150px;
+.signin-form span {
+    word-break: break-all;
 }
 
+.signin-form .fixed-label-width {
+    flex: 0 1 150px;
+    white-space: normal;
+    text-align: start;
+}
 
 .signin-form .custom-card-width {
-    flex: 0 0 500px;
+    flex: 0 1 500px;
 }
 
+
 /*signup*/
+.signup-form span {
+    word-break: break-all;
+}
+
+
 .signup-form .fixed-label-width {
-    flex: 0 0 170px;
+    flex: 0 1 170px;
+    white-space: normal;
+    text-align: start;
 }
 
 .signup-form .custom-card-width {
-    flex: 0 0 500px;
+    flex: 0 1 500px;
 }
+

@@ -14,7 +14,6 @@ import { useErrorBoundary } from 'react-error-boundary';
 import { useAuth } from './authProvider';
 import { createHttpClient } from '../../services/http-client-service';
 import { AxiosResponse } from 'axios';
-import "../../css/layout.css"
 
 interface SignUpFormValues {
     username: string;
@@ -101,10 +100,11 @@ export default function SignUp() {
                     <div className="card custom-card-width">
                         <div className="card-header">Sign Up
                         </div>
-                        <Form noValidate onSubmit={handleSubmit}>
-                            <div className="card-body d-flex flex-column">
-                                <h5 className="card-title"></h5>
-                                <p className="card-text">Please enter the following information.</p>
+                        <div className="card-body d-flex flex-column">
+                            <h5 className="card-title"></h5>
+                            <p className="card-text">Please enter the following information.</p>
+                            <Form noValidate onSubmit={handleSubmit}>
+
                                 <Row className="mb-2">
                                     <InputGroup hasValidation>
                                         <InputGroup.Text id="user-name" className="fixed-label-width text-right">Username</InputGroup.Text>
@@ -185,18 +185,19 @@ export default function SignUp() {
                                         <Button type="submit" className="w-100">Sign Up</Button>
                                     </InputGroup>
                                 </Row>
-                                <div className="d-flex">
-                                    <div className="d-flex flex-wrap justify-content-between w-100 px-1">
-                                        <RouterForm action="/auth/signin">
-                                            <button type="submit" className="btn btn-link">Sign in </button>
-                                        </RouterForm>
-                                        <RouterForm action="/">
-                                            <button type="submit" className="btn btn-link">Go back home</button>
-                                        </RouterForm>
-                                    </div>
+                            </Form>
+
+                            <div className="d-flex">
+                                <div className="d-flex flex-wrap justify-content-between w-100 px-1">
+                                    <RouterForm action="/auth/signin">
+                                        <button type="submit" className="btn btn-link"><span>Sign in</span></button>
+                                    </RouterForm>
+                                    <RouterForm action="/">
+                                        <button type="submit" className="btn btn-link"><span>Go back home</span></button>
+                                    </RouterForm>
                                 </div>
                             </div>
-                        </Form>
+                        </div>
                     </div>
                 </div>
             )}
