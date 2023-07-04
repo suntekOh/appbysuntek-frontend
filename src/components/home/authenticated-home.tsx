@@ -9,6 +9,7 @@ import HomeHeader from "./home-header";
 import HomeFooter from "./home-footer";
 import { ProductCategories } from "../../services/fake-api";
 import { HomeHeaderType } from "../../models/enums";
+import DrawerAppBar, { DrawerAppBarProps } from "../DrawerAppBar";
 
 
 export async function action() {
@@ -22,23 +23,15 @@ export function loader(props: { request: any }) {
 export default function AuthenticatedHome() {
     const productCategories = useLoaderData() as Array<ProductCategories>;
 
+    const props: DrawerAppBarProps =
+    { // make sure all required component's inputs/Props keys&types match
+        window: undefined,
+        homeHeaderType: HomeHeaderType.Authenticated
+    }
 
     return (
-        <div className="container-fluid px-0">
-            <div className="d-flex flex-column vh-100">
-                <div className="container-fluid px-0">
-                    <div className="d-flex flex-column vh-100">
-                        <HomeHeader productCategories={productCategories} homeHeaderType={HomeHeaderType.Authenticated} />
-
-                        <div className="flex-grow-1 d-flex flex-wrap px-2">
-                            welcome to protected page!
-                        </div>
-
-                        <HomeFooter />
-                    </div>
-                </div>
-            </div>
-        </div>
+        <DrawerAppBar {...props} >
+        </DrawerAppBar>
     );
 }
 
