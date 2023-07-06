@@ -13,14 +13,14 @@ export interface IFakeApi {
 }
 
 export class FakeApi implements IFakeApi {
-    private initialized: boolean = false;
+    private initialized = false;
 
     async getAllProductCategories(categoryId: number): Promise<Array<ProductCategories>> {
         if (this.initialized === false) {
             await this.initialize();
         }
 
-        let categories = await localForage.getItem("productCategories") as Array<ProductCategories>;
+        const categories = await localForage.getItem("productCategories") as Array<ProductCategories>;
         return categoryId === -1 ? categories : categories.filter(p => p.categoryId === categoryId);
     } 
 

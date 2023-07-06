@@ -28,12 +28,12 @@ export async function action(props: { request: any }) {
     return null;
 }
 
-export default function Signin({ }) {
+export default function Signin() {
     const { showBoundary } = useErrorBoundary();
 
-    let auth = useAuth();
-    let location = useLocation();
-    let navigate = useNavigate();
+    const auth = useAuth();
+    const location = useLocation();
+    const navigate = useNavigate();
 
     async function handleSignin(form: SigninFormValues) {
         try {
@@ -45,8 +45,8 @@ export default function Signin({ }) {
 
             const response = await verifySignin(userDto);
             if (response.status === 200) {
-                let from = location.state?.from?.pathname || "/root";
-                let user: AuthenticatedUser = {
+                const from = location.state?.from?.pathname || "/root";
+                const user: AuthenticatedUser = {
                     userName: userDto.userName,
                 }
 

@@ -17,8 +17,8 @@ export class AuthInfoFromLocalService implements IAuthInfoFromLocalService {
     private readonly time_to_expire_tag = "auth-time-to-expire";
 
     set(userName: string) {
-        let now = new Date();
-        let timeToExpire = now.setMinutes(now.getMinutes() + 30) / 1000
+        const now = new Date();
+        const timeToExpire = now.setMinutes(now.getMinutes() + 30) / 1000
 
         localStorage.setItem(this.user_name_tag, userName);
         localStorage.setItem(this.time_to_expire_tag, timeToExpire.toString());
@@ -39,8 +39,8 @@ export class AuthInfoFromLocalService implements IAuthInfoFromLocalService {
     }
 
     private get() {
-        let userName = localStorage.getItem(this.user_name_tag);
-        let timeToExpire = localStorage.getItem(this.time_to_expire_tag);
+        const userName = localStorage.getItem(this.user_name_tag);
+        const timeToExpire = localStorage.getItem(this.time_to_expire_tag);
 
         if (!userName) {
             return null;

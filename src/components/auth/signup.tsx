@@ -29,7 +29,7 @@ export async function action(props: { request: any }) {
 
 export default function SignUp() {
     const { showBoundary } = useErrorBoundary();
-    let navigate = useNavigate();
+    const navigate = useNavigate();
 
     async function handleSignUp(form: SignUpFormValues) {
         try {

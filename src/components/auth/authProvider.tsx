@@ -8,6 +8,7 @@ import {
 import { AuthenticatedUser } from '../../models/user-models';
 import { flushSync } from 'react-dom';
 import { IAuthInfoFromLocalService } from '../../services/auth-info-from-local-service';
+import { Console, debug } from 'console';
 
 export interface AuthContextType {
     user: AuthenticatedUser;
@@ -15,11 +16,11 @@ export interface AuthContextType {
     signout: (callback: VoidFunction) => void;
 }
 
-let AuthContext = React.createContext<AuthContextType>(null!);
+const AuthContext = React.createContext<AuthContextType>(null!);
 
 export function AuthProvider({ authInfoFromLocalService }: { authInfoFromLocalService: IAuthInfoFromLocalService }): JSX.Element {
-    let [user, setUser] = React.useState<any>(null);
-    let signin = (signedInUser: AuthenticatedUser, callback: VoidFunction) => {
+    const [user, setUser] = React.useState<any>(null);
+    const signin = (signedInUser: AuthenticatedUser, callback: VoidFunction) => {
         flushSync(() => {
             setUser({
                 userName: signedInUser.userName
@@ -29,7 +30,7 @@ export function AuthProvider({ authInfoFromLocalService }: { authInfoFromLocalSe
         callback();
     };
 
-    let signout = (callback: VoidFunction) => {
+    const signout = (callback: VoidFunction) => {
         flushSync(() => {
             setUser(null);
         });
@@ -37,7 +38,7 @@ export function AuthProvider({ authInfoFromLocalService }: { authInfoFromLocalSe
         callback();
     }
     
-    let value = { user, signin, signout };
+    const value = { user, signin, signout };
 
 
     return (
@@ -55,8 +56,8 @@ export function useAuth() {
 
 
 export function RequireAuth({ children }: { children: JSX.Element }) {
-    let auth = useAuth();
-    let location = useLocation();
+    const auth = useAuth();
+    const location = useLocation();
 
     if (!auth.user) {
         // Redirect them to the /signin page, but save the current location they were
@@ -70,19 +71,19 @@ export function RequireAuth({ children }: { children: JSX.Element }) {
 }
 
 export function isLoggedIn(): boolean {
-    let auth = useAuth();
+    const auth = useAuth();
     return auth?.user != null;
 }
 
 export function getUserNameFromAuth(): string {
-    let auth = useAuth();
+    const auth = useAuth();
     return auth?.user?.userName ?? "";
 }
 
 
 function AuthStatus() {
-    let auth = useAuth();
-    let navigate = useNavigate();
+    const auth = useAuth();
+    const navigate = useNavigate();
 
     if (!auth.user) {
         return <p>You are not logged in.</p>;
