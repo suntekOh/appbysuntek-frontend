@@ -2,10 +2,8 @@ import {
     useLoaderData
 } from "react-router-dom";
 import { ProductCategories } from '../../services/fake-api';
-import HomeHeader from './home-header';
-import HomeFooter from './home-footer';
-import { HomeHeaderType } from "../../models/enums";
-import DrawerAppBar, { DrawerAppBarProps } from "../DrawerAppBar";
+import { AppBarType } from "../../models/enums";
+import DrawerAppBar, { DrawerAppBarProps } from "./drawer-app-bar";
 
 
 export default function AnonymousHome() {
@@ -14,7 +12,7 @@ export default function AnonymousHome() {
     const props: DrawerAppBarProps  = 
     { // make sure all required component's inputs/Props keys&types match
         window: undefined,
-        homeHeaderType: HomeHeaderType.Annonymous
+        appBarType: AppBarType.Annonymous
     }
    
     return (

@@ -25,15 +25,6 @@ const defaultErrorHandler = (
     }
 }
 
-export default function RouteErrorBoundary({ authInfoService }: { authInfoService: IAuthInfoFromLocalService }) {
-    const error = useRouteError() as any;
-    console.error(error?.message, error?.stack);
-    const auth = useAuth();
-    const navigate = useNavigate();
-
-    return <ErrorLayout error={error} auth={auth} navigate={navigate} authInfoService={authInfoService} errorHandler={defaultErrorHandler} />
-}
-
 export function NoMatch({ authInfoService }: { authInfoService: IAuthInfoFromLocalService }) {
     const error = { message: "Not Found" };
     console.error(error?.message);

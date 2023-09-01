@@ -1,11 +1,18 @@
-export enum HomeHeaderType {
+export enum AppBarType {
     Annonymous,
     Authenticated
 }
 
+export enum AppBarMenu {
+    Default,
+    QnA,
+    SignIn,
+    SignOut
+}
+
 export enum HomeNavMenu {
     None,
-    SignOut
+    SignOut,
 }
 
 export enum VisibleCondition {

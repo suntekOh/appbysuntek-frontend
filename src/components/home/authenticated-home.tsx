@@ -5,11 +5,9 @@ import {
 } from "react-router-dom";
 import { getUserNameFromAuth, useAuth } from '../auth/authProvider';
 import { useErrorBoundary } from "react-error-boundary";
-import HomeHeader from "./home-header";
-import HomeFooter from "./home-footer";
 import { ProductCategories } from "../../services/fake-api";
-import { HomeHeaderType } from "../../models/enums";
-import DrawerAppBar, { DrawerAppBarProps } from "../DrawerAppBar";
+import { AppBarType } from "../../models/enums";
+import DrawerAppBar, { DrawerAppBarProps } from "./drawer-app-bar";
 
 
 export async function action() {
@@ -26,7 +24,7 @@ export default function AuthenticatedHome() {
     const props: DrawerAppBarProps =
     { // make sure all required component's inputs/Props keys&types match
         window: undefined,
-        homeHeaderType: HomeHeaderType.Authenticated
+        appBarType: AppBarType.Authenticated
     }
 
     return (

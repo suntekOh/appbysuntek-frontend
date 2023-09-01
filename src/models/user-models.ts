@@ -1,3 +1,5 @@
+import { AppBarMenu, VisibleCondition } from "./enums";
+
 export interface UserDto {
     userName: string;
     password: string;
@@ -9,3 +11,12 @@ export interface UserDto {
 export interface AuthenticatedUser {
     userName: string,
 }
+
+export interface AppBarMenuItem {
+    key: number;
+    name: string;
+    path: string;
+    visibleCondition: VisibleCondition;
+    menu: AppBarMenu;
+  }
+   
